@@ -1,10 +1,10 @@
-from flask import Flask, render_template
+from flask import render_template
 from . import app
 
 @app.route('/')
 def home():
-    return render_template('index.html', name="Max")
+    return render_template('index.html', name = 'Max')
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
