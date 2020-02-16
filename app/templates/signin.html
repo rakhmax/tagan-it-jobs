@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container">
+    <form id="signinForm" method="POST">
+        <div class="field email">
+            <p class="control has-icons-left has-icons-right">
+                <input class="input" name="email" type="email" placeholder="Email">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field password">
+            <label class="label" for="password">Password</label>
+            <div class="control">
+                <input class="input" type="password" name="password" id="password" required>
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+<script>
+    signinForm.addEventListener("submit", async (e) => {
+        e.preventDefault()
+
+        try {
+            let response = await fetch('/api/signin', { method: 'POST', body: new FormData(signinForm) })
+            let data = await response.json()
+
+            if (response.status === 422) {
+                document.querySelector('.email')
+                    .insertAdjacentHTML('beforeend', `<p class="help is-danger">${data.msg}</p>`)
+                return
+            } else if (response.status !== 200) {
+                console.log(`Looks like there was a problem. Status code: ${response.status}`)
+                return
+            } else {
+                location.href = '/dashboard'
+            }
+        } catch(err) {
+            console.error(err)
+        }
+    })
+</script>
+{% endblock %}

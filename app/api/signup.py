@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, abort, make_response
 from .. import app
 from .. import db
 import hashlib
@@ -11,25 +11,29 @@ def api_signup():
     password = hashlib.sha256(request.form.get('password').encode()).hexdigest()
     agreement = request.form.get('agreement')
 
-    create_query = f'INSERT INTO Users (Firstname, Lastname, Email, Password) VALUES ("{firstname}", "{lastname}", "{email}", "{password}")'
-    select_query = f'SELECT Firstname, Lastname, Email FROM Users WHERE Email = "{email}"'
-
-    db.cursor.execute(select_query)
-    user = db.cursor.fetchone()
-
     if not agreement:
-        return jsonify({'msg': 'User did not apply the agreement', 'code': 1001}), 501
+        return make_response(jsonify({'msg': 'You need to apply the agreement'}), 409)
 
-    if user:
-        return jsonify({'msg': 'User already exists', 'code': 1002}), 501
+    create_query = f'INSERT INTO users (firstname, lastname, email, password) VALUES ("{firstname}", "{lastname}", "{email}", "{password}")'
+    select_query = f'SELECT firstname, lastname, email FROM users WHERE email = "{email}"'
+
+    try:
+        db.cursor.execute(select_query)
+        user = db.cursor.fetchone()
+
+        if user:
+            return make_response(jsonify({'msg': 'User already exists'}), 422)
+
+    except:
+        return make_response(jsonify({'msg': 'Unable to create user'}), 500)
 
     try:
         db.cursor.execute(create_query)
         db.conn.commit()
 
-        return jsonify({'msg': 'Thank you for registration', 'code': 1000})
+        return jsonify({'msg': 'Thank you for registration'})
     except:
-        return 'Unable to create user', 501
+        return make_response(jsonify({'msg': 'Unable to create user'}), 500)
 
     
 

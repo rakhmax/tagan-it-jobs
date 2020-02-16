@@ -1,61 +1,88 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<form id="signupForm" method="POST">
-    <div class="field firstname">
-        <label class="label" for="firstname">Firstname</label>
-        <div class="control">
-            <input class="input" type="text" name="firstname" id="firstname" required>
+<section class="container">
+    <form id="signupForm" method="POST">
+        <div class="field firstname">
+            <label class="label" for="firstname">Firstname</label>
+            <div class="control">
+                <input class="input" type="text" name="firstname" id="firstname" required>
+            </div>
         </div>
-    </div>
-    <div class="field lastname">
-        <label class="label" for="lastname">Lastname</label>
-        <div class="control">
-            <input class="input" type="text" name="lastname" id="lastname" required>
+        <div class="field lastname">
+            <label class="label" for="lastname">Lastname</label>
+            <div class="control">
+                <input class="input" type="text" name="lastname" id="lastname" required>
+            </div>
         </div>
-    </div>
-    <div class="field email">
-        <label class="label" for="email">Email</label>
-        <div class="control">
-            <input class="input" type="email" name="email" id="email" required>
+        <div class="field email">
+            <label class="label" for="email">Email</label>
+            <div class="control">
+                <input class="input" type="email" name="email" id="email" required>
+            </div>
         </div>
-    </div>
-    <div class="field password">
-        <label class="label" for="password">Password</label>
-        <div class="control">
-            <input class="input" type="password" name="password" id="password" required>
+        <div class="field password">
+            <label class="label" for="password">Password</label>
+            <div class="control">
+                <input class="input" type="password" name="password" id="password" required>
+            </div>
         </div>
-    </div>
-    <div class="field agreement">
-        <div class="control">
-            <label class="checkbox">
-                <input type="checkbox" name="agreement" id="agreement"> 
-                <span>I agree to the <a href="#">terms and conditions</a></span>
-            </label>
+        <div class="field agreement">
+            <div class="control">
+                <label class="checkbox">
+                    <input type="checkbox" name="agreement" id="agreement"> 
+                    <span>I agree to the <a href="#">terms and conditions</a></span>
+                </label>
+            </div>
         </div>
-    </div>
-    <div class="field is-grouped">
-        <div class="control">
-            <button class="button is-link" type="submit">Submit</button>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link" type="submit">Submit</button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</section>
 
 <script>
     signupForm.addEventListener("submit", async (e) => {
         e.preventDefault()
 
-        let response = await fetch('/api/signup', {
-            method: 'POST',
-            body: new FormData(signupForm)
-        });
-
-        let data = await response.json()
-
-        if (data.code === 1002) {
-            document.querySelector('.email').insertAdjacentHTML('beforeend', '<p class="help is-danger">This email is taken</p>')
+        try {
+            let response = await fetch('/api/signup', { method: 'POST', body: new FormData(signupForm) })
+            let data = await response.json()
+            
+            if (response.status === 422) {
+                document.querySelector('.email')
+                    .insertAdjacentHTML('beforeend', `<p class="help is-danger">${data.msg}</p>`)
+                return
+            } else if (response.status === 409) {
+                document.querySelector('.agreement')
+                    .insertAdjacentHTML('beforeend', `<p class="help is-danger">${data.msg}</p>`)
+                return
+            } else if (response.status !== 200) {
+                console.log(`Looks like there was a problem. Status code: ${response.status}`)
+                return
+            }
+        } catch(err) {
+            console.error(err)
         }
 
-        console.log(data)
+        try {
+            let response = await fetch('/api/signin', { method: 'POST', body: new FormData(signupForm) })
+            let data = await response.json()
+
+            if (response.status === 422) {
+                document.querySelector('.email')
+                    .insertAdjacentHTML('beforeend', `<p class="help is-danger">${data.msg}</p>`)
+                return
+            } else if (response.status !== 200) {
+                console.log(`Looks like there was a problem. Status code: ${response.status}`)
+                return
+            } else {
+                location.href = '/dashboard'
+            }
+        } catch(err) {
+            console.error(err)
+        }
     })
 </script>
 {% endblock %}
