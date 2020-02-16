@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container content">
+    <form id="loginForm" method="POST">
+        <div class="field email">
+            <label class="label" for="password">Email</label>
+            <div class="control">
+                <input class="input" name="email" type="email" required>
+            </div>
+        </div>
+        <div class="field password">
+            <label class="label" for="password">Password</label>
+            <div class="control">
+                <input class="input" type="password" name="password" id="password" required>
+            </div>
+        </div>
+        <p class="has-text-right"><a href="{{ url_for('signup') }}">Register</a></p>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link" type="submit">Log in</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

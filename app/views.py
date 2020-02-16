@@ -12,7 +12,7 @@ def get_user():
 @app.route('/')
 def home():
     user = None
-    
+
     if session.get('is_logged_in'):
         user = get_user()
 
@@ -20,19 +20,22 @@ def home():
 
 @app.route('/signup')
 def signup():
+    if session.get('is_logged_in'):
+        return redirect('/dashboard')
+        
     return render_template('signup.html', title = 'Sign up')
 
-@app.route('/signin')
-def signin():
+@app.route('/login')
+def login():
     if session.get('is_logged_in'):
         return redirect('/dashboard')
 
-    return render_template('signin.html', title = 'Sign in')
+    return render_template('login.html', title = 'Log in')
 
 @app.route('/dashboard')
 def dashboard():
     if not session.get('is_logged_in'):
-        return redirect('/signin')
+        return redirect('/login')
 
     user = get_user()
 

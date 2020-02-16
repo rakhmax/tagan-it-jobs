@@ -34,7 +34,3 @@ def api_signup():
         return jsonify({'msg': 'Thank you for registration'})
     except:
         return make_response(jsonify({'msg': 'Unable to create user'}), 500)
-
-    
-
-    
