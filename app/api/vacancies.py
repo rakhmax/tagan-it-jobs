@@ -11,7 +11,6 @@ def api_vacancies_page(page):
     total_vacancies = data['found']
     total_pages = data['pages']
 
-
     try:
         vacancies = []
 
@@ -42,7 +41,6 @@ def api_vacancies_page(page):
         vacancies_json = json.loads(json.dumps(final_json))
 
         return make_response(jsonify(vacancies_json), 200)
-
 
     except Exception as e:
         print(e)

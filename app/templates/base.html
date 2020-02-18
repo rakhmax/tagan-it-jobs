@@ -7,12 +7,13 @@
         <title>{{title}}</title>
     {% endif %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css')}}">
+    <!-- <link rel="stylesheet" type="text/css" href="https://unpkg.com/bulma-prefers-dark" /> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
 </head>
 <body>
     <nav class="navbar container" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item is-paddingless" href="/">
+            <a class="navbar-item" href="/">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                 width="54.000000pt" height="54.000000pt" viewBox="0 0 54.000000 54.000000" id="navLogo">
                     <g transform="translate(0.000000,54.000000) scale(0.100000,-0.100000)" stroke="none">
@@ -37,8 +38,7 @@
         </div>
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item">Home</a>
-                <a class="navbar-item">Documentation</a>
+                <a class="navbar-item" href="{{ url_for('vacancies') }}">Вакансии</a>
             </div>
             {% if name %}
                 <div class="navbar-end">

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="container content">
+<main class="container content">
     <form id="signupForm" method="POST">
         <div class="field firstname">
             <label class="label" for="firstname">Firstname</label>
@@ -65,7 +65,7 @@
             <footer class="modal-card-foot"></footer>
         </div>
     </div>
-</section>
+</main>
 
 <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
 {% endblock %}

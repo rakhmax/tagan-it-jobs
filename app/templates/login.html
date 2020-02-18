@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="container content">
+<main class="container content">
     <form id="loginForm" method="POST">
         <div class="field email">
             <label class="label" for="password">Email</label>
@@ -21,7 +21,7 @@
             </div>
         </div>
     </form>
-</section>
+</main>
 
 <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 {% endblock %}
