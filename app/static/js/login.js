@@ -19,7 +19,7 @@ document.querySelector('#loginForm').addEventListener("submit", async (e) => {
             console.log(`Looks like there was a problem. Status code: ${response.status}`)
             return
         } else {
-            location.href = '/dashboard'
+            location.href = '/favorites'
         }
     } catch(err) {
         console.error(err)

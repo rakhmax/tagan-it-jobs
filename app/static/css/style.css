@@ -1,3 +1,17 @@
 .navbar {
     margin-bottom: 30px;
 }
+
+.navbar-brand span {
+    font-size: 40px;
+    margin-left: 12px;
+}
+
+.navbar-brand:hover svg {
+    fill: #3273dc;
+}
+
+
+/* 
+#navLogo:hover {
+} */

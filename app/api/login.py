@@ -9,13 +9,14 @@ def api_login():
     password = hashlib.sha256(request.form.get('password').encode()).hexdigest()
 
     select_user_query = f'SELECT * FROM users WHERE email = "{email}"'
-    select_query = f'SELECT * FROM users WHERE email = "{email}" AND password = "{password}"'
 
     db.cursor.execute(select_user_query)
     user = db.cursor.fetchone()
 
     if not user:
         return make_response(jsonify({'msg': 'User does not exist'}), 422)
+
+    select_query = f'SELECT * FROM users WHERE email = "{email}" AND password = "{password}"'
 
     db.cursor.execute(select_query)
     user_password = db.cursor.fetchone()

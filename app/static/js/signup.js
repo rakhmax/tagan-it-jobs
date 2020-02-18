@@ -61,7 +61,7 @@ closeModal.addEventListener('click', () => {
             console.log(`Looks like there was a problem. Status code: ${response.status}`)
             return
         } else {
-            location.href = '/dashboard'
+            location.href = '/favorites'
         }
     } catch(err) {
         console.error(err)
