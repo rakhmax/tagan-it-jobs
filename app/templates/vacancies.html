@@ -3,9 +3,10 @@
 {% block content %}
     <main class="container content">
         <h1>Вакансии</h1>
-        <section class="vacancies">
-        </section>
-        <button class="button button__show-more">Показать еще</button>
+        <section class="vacancies"></section>
+        <div class="button__container has-text-centered">
+            <button class="button button__show-more is-loading">Показать еще</button>
+        </div>
     </main>
     <script src="{{ url_for('static', filename='js/vacancies.js') }}"></script>
 {% endblock %}

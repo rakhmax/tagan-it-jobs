@@ -1,3 +1,7 @@
+.button__container {
+    margin-top: 16px;
+}
+
 .navbar {
     margin-bottom: 30px;
 }
@@ -11,7 +15,6 @@
     fill: #3273dc;
 }
 
-
-/* 
-#navLogo:hover {
-} */
+.homepage h1 {
+    font-size: 5rem;
+}

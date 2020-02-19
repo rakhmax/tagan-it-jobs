@@ -1,12 +1,12 @@
 import requests
 import json
-from flask import jsonify, make_response
+from flask import jsonify, make_response, session
 from .. import app
 from .. import db
 
 @app.route('/api/vacancies/<page>', methods = ['GET', 'POST'])
 def api_vacancies_page(page):
-    data = json.loads(requests.get(f'https://api.hh.ru/vacancies?area=1550&industry=7&page={page}').text)
+    data = json.loads(requests.get(f'https://api.hh.ru/vacancies?area=1550&industry=7&page={page}&per_page=10').text)
 
     total_vacancies = data['found']
     total_pages = data['pages']
@@ -16,6 +16,7 @@ def api_vacancies_page(page):
 
         for item in data['items']:
             vacancy = {
+                'id': item['id'],
                 'url': item['alternate_url'],
                 'name': item['name'],
                 'employer': {
@@ -44,4 +45,20 @@ def api_vacancies_page(page):
 
     except Exception as e:
         print(e)
+
+@app.route('/api/vacancies/favorite/<id>', methods = ['GET', 'POST'])
+def api_favorites(id):
+    if not session.get('is_logged_in'):
+        return make_response(jsonify({'msg': 'Not logged in'}), 401)
+
+    insert_favorite_query = f'INSERT INTO favorites (user_id, vacancy_id) VALUES ({session.get("is_logged_in")}, {id})'
+
+    try:
+        db.cursor.execute(insert_favorite_query)
+        db.conn.commit()
+
+        return make_response(jsonify({'msg': 'Added'}), 200)
+
+    except:
+        return make_response(jsonify({'msg': 'Unable to add'}), 500)
 

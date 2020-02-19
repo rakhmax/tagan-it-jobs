@@ -1,73 +1,73 @@
+async function addFavorite(id) {
+    let res = await fetch(`/api/vacancies/favorite/${id}`)
+
+    if (res.statusText !== 'OK') location.href = '/login'
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     let page = 0
     let totalPages
+    let buttonShowMore = document.querySelector('.button__show-more')
+    let vacanciesSection = document.querySelector('.vacancies')
+
+    let createVacancyTile = (vacancy) => {
+        let card = document.createElement('div')
+
+        card.classList.add('vacancy', 'tile', 'is-parent')
+        card.innerHTML = `
+            <article class="tile is-child box">
+                <div class="level">
+                    <p class="title"><a href=${vacancy.url}>${vacancy.name}</a></p>
+                    <img src="${vacancy.employer.logo}" alt="${vacancy.employer.name}" loading="lazy"/>
+                </div>
+                <div class="content">
+                    ${vacancy.responsibility ? `<p class="description">${vacancy.responsibility}</p>` : '<p class="description">Описание отсутствует</p>'}
+                    ${vacancy.salary ? `<p class="salary has-text-weight-semibold">
+                        ${vacancy.salary.from ? `<span class="salary-from">от ${vacancy.salary.from} </span>` : ''}
+                        ${vacancy.salary.to ? `<span class="salary-from">до ${vacancy.salary.to}</span>` : ''}
+                        <span class="salary-currency"> ${vacancy.salary.currency}</span>
+                    </p>` : '<p class="salary has-text-weight-semibold"><span class="salary-no">З/п не указана</span></p>'}
+                </div>
+                <button class="button is-small" onclick="addFavorite(${vacancy.id})">В избранное</button>
+            </article>`
+
+        vacanciesSection.append(card)
+    }
 
     try {
         let response = await fetch(`/api/vacancies/${page}`)
         let data = await response.json()
-        let vacanciesSection = document.querySelector('.vacancies')
+
         totalPages = data.total_pages
 
-        data.vacancies.forEach(vacancy => {
-            let card = document.createElement('div')
-            card.classList.add('vacancy', 'tile', 'is-parent')
-            card.innerHTML = `
-                <article class="tile is-child box">
-                    <div class="level">
-                        <p class="title"><a href=${vacancy.url}>${vacancy.name}</a></p>
-                        <img src="${vacancy.employer.logo}" alt="${vacancy.employer.name}"/>
-                    </div>
-                    <div class="content">
-                        ${vacancy.responsibility ? `<p class="description">${vacancy.responsibility}</p>` : '<p class="description">Описание отсутствует</p>'}
-                        ${vacancy.salary ? `<p class="salary">
-                            ${vacancy.salary.from ? `<span class="salary-from">от ${vacancy.salary.from} </span>` : ''}
-                            ${vacancy.salary.to ? `<span class="salary-from">до ${vacancy.salary.to}</span>` : ''}
-                            <span class="salary-currency"> ${vacancy.salary.currency}</span>
-                        </p>` : '<span class="salary-no">З/п не указана</span>'}
-                    </div>
-                </article>`
+        // document.querySelector('.vacancies > h1').innerHTML = `Найдено ${data.total_vacancies} вакансий` 
 
-            vacanciesSection.prepend(card)
-        });
+        data.vacancies.forEach(vacancy => createVacancyTile(vacancy));
+
+        buttonShowMore.classList.remove('is-loading')
     } catch(err) {
         console.log(err)
     }
 
-    document.querySelector('.button__show-more').addEventListener('click', async () => {
-        page += 1
+    buttonShowMore.addEventListener('click', async () => {
+        page++
+        buttonShowMore.classList.add('is-loading')
 
         try {
             let response = await fetch(`/api/vacancies/${page}`)
             let data = await response.json()
-            let vacanciesSection = document.querySelector('.vacancies')
 
-            data.vacancies.forEach(vacancy => {
-                let card = document.createElement('div')
-                card.classList.add('vacancy', 'tile', 'is-parent')
-                card.innerHTML = `
-                    <article class="tile is-child box">
-                        <div class="level">
-                            <p class="title"><a href=${vacancy.url}>${vacancy.name}</a></p>
-                            <img src="${vacancy.employer.logo}" alt="${vacancy.employer.name}"/>
-                        </div>
-                        <div class="content">
-                            ${vacancy.responsibility ? `<p class="description">${vacancy.responsibility}</p>` : ''}
-                            ${vacancy.salary ? `<p class="salary">
-                                ${vacancy.salary.from ? `<span class="salary-from">от ${vacancy.salary.from} </span>` : ''}
-                                ${vacancy.salary.to ? `<span class="salary-from">до ${vacancy.salary.to}</span>` : ''}
-                                <span class="salary-currency"> ${vacancy.salary.currency}</span>
-                            </p>` : '<span class="salary-no">З/п не указана</span>'}
-                        </div>
-                    </article>`
-
-                vacanciesSection.append(card)
-            });
+            data.vacancies.forEach(vacancy => createVacancyTile(vacancy))
         } catch(err) {
             console.log(err)
         }
 
+        buttonShowMore.classList.remove('is-loading')
+
         if (page === totalPages - 1) {
-            document.querySelector('.button__show-more').remove()
+            buttonShowMore.remove()
         }
     })
+
+    
 })
