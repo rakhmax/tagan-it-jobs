@@ -1,7 +1,10 @@
-async function addFavorite(id) {
+async function addFavorite(id, el) {
     let res = await fetch(`/api/vacancies/favorite/${id}`)
 
     if (res.statusText !== 'OK') location.href = '/login'
+
+    el.classList.add('is-info')
+    el.innerHTML = 'В избранном'
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -9,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let totalPages
     let buttonShowMore = document.querySelector('.button__show-more')
     let vacanciesSection = document.querySelector('.vacancies')
+    let jsonData = []
 
     let createVacancyTile = (vacancy) => {
         let card = document.createElement('div')
@@ -28,7 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <span class="salary-currency"> ${vacancy.salary.currency}</span>
                     </p>` : '<p class="salary has-text-weight-semibold"><span class="salary-no">З/п не указана</span></p>'}
                 </div>
-                <button class="button is-small" onclick="addFavorite(${vacancy.id})">В избранное</button>
+                ${jsonData.favorites.flat().includes(Number(vacancy.id)) ? `<button class="button is-small is-info">В избранном</button>` 
+                : `<button class="button is-small" onclick="addFavorite(${vacancy.id}, this)">В избранное</button>`}
             </article>`
 
         vacanciesSection.append(card)
@@ -40,7 +45,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         totalPages = data.total_pages
 
-        // document.querySelector('.vacancies > h1').innerHTML = `Найдено ${data.total_vacancies} вакансий` 
+        document.querySelector('h1').innerHTML = `Найдено ${data.total_vacancies} вакансий` 
+
+        jsonData = data
 
         data.vacancies.forEach(vacancy => createVacancyTile(vacancy));
 

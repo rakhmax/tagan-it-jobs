@@ -11,9 +11,17 @@ def api_vacancies_page(page):
     total_vacancies = data['found']
     total_pages = data['pages']
 
+    vacancies_id = []
+
+    if session.get('is_logged_in'):
+        select = f'SELECT DISTINCT vacancy_id from favorites WHERE user_id = {session.get("is_logged_in")}'
+
+        db.cursor.execute(select)
+        vacancies_id = db.cursor.fetchall()
+
     try:
         vacancies = []
-
+        
         for item in data['items']:
             vacancy = {
                 'id': item['id'],
@@ -36,7 +44,8 @@ def api_vacancies_page(page):
         final_json = {
             'vacancies': vacancies,
             'total_vacancies': total_vacancies,
-            'total_pages': total_pages
+            'total_pages': total_pages,
+            'favorites': vacancies_id
         }
     
         vacancies_json = json.loads(json.dumps(final_json))
