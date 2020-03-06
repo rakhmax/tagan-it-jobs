@@ -1,8 +1,16 @@
-async function deleteFavorite(id) {
+async function deleteFavorite(id, el) {
     let res = await fetch(`/api/favorites/delete/${id}`, {method: 'DELETE'})
 
+    let vacanciesSection = document.querySelector('.vacancies')
+
     if (res.statusText !== 'OK') location.href = '/login'
-    if (res.statusText === 'OK') location.reload()
+    if (res.statusText === 'OK') {
+        el.closest('.vacancy').remove()
+
+        if (!vacanciesSection.hasChildNodes()) {
+            vacanciesSection.innerHTML = `<h3>Пусто</h3>`
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -26,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <span class="salary-currency"> ${vacancy.salary.currency}</span>
                     </p>` : '<p class="salary has-text-weight-semibold"><span class="salary-no">З/п не указана</span></p>'}
                 </div>
-                <button class="button is-small" onclick="deleteFavorite(${vacancy.id})">Удалить из избранного</button>
+                <button class="button is-small" onclick="deleteFavorite(${vacancy.id}, this)">Удалить из избранного</button>
             </article>`
 
         vacanciesSection.append(card)
@@ -37,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let data = await response.json()
 
         if(data.msg === 'No vacancies') {
-            vacanciesSection.innerHTML = `<h3>Нет избранного</h3>`
+            vacanciesSection.innerHTML = `<h3>Пусто</h3>`
         } 
 
         data.forEach(vacancy => createVacancyTile(vacancy));
