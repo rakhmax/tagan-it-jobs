@@ -6,15 +6,35 @@
     margin-bottom: 30px;
 }
 
-.navbar-brand span {
+.navbar-brand__name {
     font-size: 40px;
     margin-left: 12px;
 }
 
-.navbar-brand:hover svg {
+.navbar-item:hover svg {
     fill: #3273dc;
 }
 
 .homepage h1 {
     font-size: 5rem;
+}
+
+main {
+    padding: 8px;
+}
+
+#navLogo {
+    width: 60px;
+    height: 60px;
+}
+
+@media (max-width: 575px) {
+    .navbar-brand__name {
+        display: none;
+    }
+
+    #navLogo {
+        width: 36px;
+        height: 36px;
+    }
 }

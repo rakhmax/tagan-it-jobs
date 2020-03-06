@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     let buttonLogout = document.querySelector('.button__logout')
+    let navbarBurger = document.querySelector('.navbar-burger')
+    let navbar = document.getElementById('navbar')
+
+
+    navbarBurger.addEventListener('click', () => {
+        navbar.classList.toggle('is-active')
+    })
 
     if (buttonLogout) {
         buttonLogout.addEventListener('click', async e => {

@@ -75,6 +75,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             buttonShowMore.remove()
         }
     })
-
-    
 })
