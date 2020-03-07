@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-    <main class="container content">
-        <section class="homepage">
-            <h1>Вся работа для АйТишников Таганрога собрана в одном месте</h1>
-        </section>
-    </main>
+<main class="homepage container content">
+    <section class="homepage__section">
+        <h1>Вся работа для АйТишников Таганрога собрана в одном месте</h1>
+    </section>
+</main>
+<div id="particles-js"></div>
+<script src="{{ url_for('static', filename='js/particles.min.js') }}"></script>
+<script>
+    particlesJS.load('particles-js', 'static/particlesjs-config.json');
+</script>
 {% endblock %}

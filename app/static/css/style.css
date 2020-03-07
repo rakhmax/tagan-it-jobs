@@ -4,6 +4,7 @@
 
 .navbar {
     margin-bottom: 30px;
+    background-color: transparent;
 }
 
 .navbar-brand__name {
@@ -23,12 +24,27 @@ main {
     padding: 8px;
 }
 
+.homepage {
+    z-index: 1;
+}
+
+#particles-js {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+}
+
 #navLogo {
     width: 60px;
     height: 60px;
 }
 
 @media (max-width: 575px) {
+    .homepage h1 {
+        font-size: 3rem;
+    }
+
     .navbar-brand__name {
         display: none;
     }
