@@ -21,11 +21,12 @@
 }
 
 main {
-    padding: 8px;
+    padding: 12px;
 }
 
 .homepage {
     z-index: 1;
+    height: calc(100vh - 130px);
 }
 
 #particles-js {
