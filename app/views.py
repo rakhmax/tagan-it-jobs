@@ -4,7 +4,7 @@ from . import app
 from . import db
 
 def get_user():
-    select_query = f'SELECT firstname, lastname FROM users WHERE id={session.get("is_logged_in")}'
+    select_query = f'SELECT firstname, lastname FROM users WHERE id={session.get("user_id")}'
 
     db.cursor.execute(select_query)
     user = db.cursor.fetchone()
@@ -15,7 +15,7 @@ def get_user():
 def home():
     user = None
 
-    if session.get('is_logged_in'):
+    if 'user_id' in session:
         user = get_user()
 
     return render_template('index.html', name = user)
@@ -23,7 +23,7 @@ def home():
 
 @app.route('/signup')
 def signup():
-    if session.get('is_logged_in'):
+    if 'user_id' in session:
         return redirect('/favorites')
         
     return render_template('signup.html', title = 'Регистрация')
@@ -31,7 +31,7 @@ def signup():
 
 @app.route('/login')
 def login():
-    if session.get('is_logged_in'):
+    if 'user_id' in session:
         return redirect('/favorites')
 
     return render_template('login.html', title = 'Вход')
@@ -41,7 +41,7 @@ def login():
 def vacancies():
     user = None
 
-    if session.get('is_logged_in'):
+    if 'user_id' in session:
         user = get_user()
 
     return render_template('vacancies.html', title = 'Все вакансии', name = user)
@@ -49,7 +49,7 @@ def vacancies():
 
 @app.route('/favorites')
 def favorites():
-    if not session.get('is_logged_in'):
+    if not 'user_id' in session:
         return redirect('/login')
 
     user = get_user()
@@ -59,7 +59,7 @@ def favorites():
 
 @app.route('/settings')
 def settings():
-    if not session.get('is_logged_in'):
+    if not 'user_id' in session:
         return redirect('/login')
 
     user = get_user()

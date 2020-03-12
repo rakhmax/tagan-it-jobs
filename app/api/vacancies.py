@@ -13,8 +13,8 @@ def api_vacancies_page(page):
 
     vacancies_id = []
 
-    if 'is_logged_in' in session:
-        select = f'SELECT DISTINCT vacancy_id from favorites WHERE user_id = {session.get("is_logged_in")}'
+    if 'user_id' in session:
+        select = f'SELECT DISTINCT vacancy_id from favorites WHERE user_id = {session.get("user_id")}'
 
         db.cursor.execute(select)
         vacancies_id = db.cursor.fetchall()
@@ -53,21 +53,21 @@ def api_vacancies_page(page):
         return make_response(jsonify(vacancies_json), 200)
 
     except Exception as e:
-        print(e)
+        return make_response(jsonify(msg = e), 500)
 
 @app.route('/api/vacancies/favorite/<id>', methods = ['GET', 'POST'])
 def api_favorites(id):
-    if not 'is_logged_in' in session:
-        return make_response(jsonify({'msg': 'Not logged in'}), 401)
+    if not 'user_id' in session:
+        return make_response(jsonify(msg = 'Unauthorized'), 401)
 
-    insert_favorite_query = f'INSERT INTO favorites (user_id, vacancy_id) VALUES ({session.get("is_logged_in")}, {id})'
+    insert_favorite_query = f'INSERT INTO favorites (user_id, vacancy_id) VALUES ({session.get("user_id")}, {id})'
 
     try:
         db.cursor.execute(insert_favorite_query)
         db.conn.commit()
 
-        return make_response(jsonify({'msg': 'Added'}), 200)
+        return make_response(jsonify(msg = 'Added'), 200)
 
     except:
-        return make_response(jsonify({'msg': 'Unable to add'}), 500)
+        return make_response(jsonify(msg = 'Unable to add'), 500)
 

@@ -5,4 +5,4 @@ from .. import app
 def api_logout():
     session.clear()
 
-    return make_response(jsonify({'msg': 'Logged out'}), 200)
+    return make_response(jsonify(msg = 'Logged out'), 200)

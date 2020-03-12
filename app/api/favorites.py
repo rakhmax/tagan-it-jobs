@@ -6,19 +6,19 @@ from .. import db
 
 @app.route('/api/favorites', methods = ['GET', 'POST'])
 def api_favorites_page():
-    if not 'is_logged_in' in session:
-        return make_response(jsonify({'msg': 'Not logged in'}), 403)
+    if not 'user_id' in session:
+        return make_response(jsonify(msg = 'Unauthorized'), 401)
 
     try:
-        select = f'SELECT DISTINCT vacancy_id from favorites WHERE user_id = {session.get("is_logged_in")}'
+        select = f'SELECT DISTINCT vacancy_id from favorites WHERE user_id = {session.get("user_id")}'
 
         db.cursor.execute(select)
         vacancies_id = db.cursor.fetchall()
 
         if not vacancies_id:
-            return make_response(jsonify({'msg': 'No vacancies'}), 422)
+            return make_response(jsonify(msg = 'No vacancies'), 422)
     except:
-        return make_response(jsonify({'msg': 'Not working'}), 500)
+        return make_response(jsonify(msg = 'Not working'), 500)
 
     try:
         vacancies = []
@@ -48,22 +48,22 @@ def api_favorites_page():
         return make_response(jsonify(vacancies_json), 200)
 
     except Exception as e:
-        return make_response(jsonify({'msg': e}), 500)
+        return make_response(jsonify(msg = e), 500)
 
 @app.route('/api/favorites/delete/<id>', methods = ['DELETE'])
 def delete_favorite(id):
-    if not 'is_logged_in' in session:
-        return make_response(jsonify({'msg': 'Unauthorized'}), 401)
+    if not 'user_id' in session:
+        return make_response(jsonify(msg = 'Unauthorized'), 401)
 
     try:
-        select = f'DELETE FROM favorites WHERE user_id = {session.get("is_logged_in")} AND vacancy_id = {id}'
+        select = f'DELETE FROM favorites WHERE user_id = {session.get("user_id")} AND vacancy_id = {id}'
 
         db.cursor.execute(select)
         db.conn.commit()
 
-        return make_response(jsonify({'msg': 'Removed'}), 200)
+        return make_response(jsonify(msg = 'Removed'), 200)
     except :
-        return make_response(jsonify({'msg': 'Server error'}), 500)
+        return make_response(jsonify(msg = 'Server error'), 500)
 
 
 
