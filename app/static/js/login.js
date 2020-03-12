@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let response = await fetch('/api/login', { method: 'POST', body: new FormData(loginForm) })
             let data = await response.json()
-    
+
             if (response.status === 422) {
                 document.querySelector('.email')
                     .insertAdjacentHTML('beforeend', `<p class="help is-danger">${data.msg}</p>`)

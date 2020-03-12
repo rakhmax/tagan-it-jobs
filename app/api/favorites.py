@@ -6,7 +6,7 @@ from .. import db
 
 @app.route('/api/favorites', methods = ['GET', 'POST'])
 def api_favorites_page():
-    if not session.get('is_logged_in'):
+    if not 'is_logged_in' in session:
         return make_response(jsonify({'msg': 'Not logged in'}), 403)
 
     try:
@@ -52,7 +52,7 @@ def api_favorites_page():
 
 @app.route('/api/favorites/delete/<id>', methods = ['DELETE'])
 def delete_favorite(id):
-    if not session.get('is_logged_in'):
+    if not 'is_logged_in' in session:
         return make_response(jsonify({'msg': 'Unauthorized'}), 401)
 
     try:

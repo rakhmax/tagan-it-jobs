@@ -13,7 +13,7 @@ def api_vacancies_page(page):
 
     vacancies_id = []
 
-    if session.get('is_logged_in'):
+    if 'is_logged_in' in session:
         select = f'SELECT DISTINCT vacancy_id from favorites WHERE user_id = {session.get("is_logged_in")}'
 
         db.cursor.execute(select)
@@ -57,7 +57,7 @@ def api_vacancies_page(page):
 
 @app.route('/api/vacancies/favorite/<id>', methods = ['GET', 'POST'])
 def api_favorites(id):
-    if not session.get('is_logged_in'):
+    if not 'is_logged_in' in session:
         return make_response(jsonify({'msg': 'Not logged in'}), 401)
 
     insert_favorite_query = f'INSERT INTO favorites (user_id, vacancy_id) VALUES ({session.get("is_logged_in")}, {id})'

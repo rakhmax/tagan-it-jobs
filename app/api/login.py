@@ -24,6 +24,7 @@ def api_login():
     if not user_password:
         return make_response(jsonify({'msg': 'Password is incorrect'}), 409)
 
+    session.permanent = True
     session['is_logged_in'] = user[0]
 
     return make_response(jsonify({'msg': 'Logged in'}), 200)
