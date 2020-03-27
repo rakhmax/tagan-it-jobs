@@ -15,19 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.status === 422) {
                 document.querySelector('.email')
                     .insertAdjacentHTML('beforeend', `<p class="help is-danger">${data.msg}</p>`)
+                buttonLogin.classList.remove('is-loading')
                 return
             } else if (response.status === 409) {
                 document.querySelector('.password')
                     .insertAdjacentHTML('beforeend', `<p class="help is-danger">${data.msg}</p>`)
+                buttonLogin.classList.remove('is-loading')
                 return
             } else if (response.status !== 200) {
                 console.log(`Looks like there was a problem. Status code: ${response.status}`)
+                buttonLogin.classList.remove('is-loading')
                 return
             } else {
                 location.href = '/favorites'
             }
         } catch(err) {
             console.error(err)
+            buttonLogin.classList.remove('is-loading')
         }
 
         buttonLogin.classList.remove('is-loading')

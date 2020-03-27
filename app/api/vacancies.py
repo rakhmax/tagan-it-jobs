@@ -66,7 +66,7 @@ def api_favorites(id):
         db.cursor.execute(insert_favorite_query)
         db.conn.commit()
 
-        return make_response(jsonify(msg = 'Added'), 200)
+        return make_response(jsonify(msg = 'Добавлено'), 200)
 
     except:
         return make_response(jsonify(msg = 'Unable to add'), 500)

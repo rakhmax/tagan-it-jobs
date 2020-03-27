@@ -2,6 +2,28 @@
 {% block content %}
 <main class="container content">
     <h1>Настройки</h1>
+    <h3>Изменить пароль</h3>
+    <form id="changePassword" method="POST">
+        <div class="field passwordNew">
+            <label class="label" for="passwordNew">Новый пароль</label>
+            <div class="control">
+                <input class="input" name="passwordNew" type="password" id="passwordNew" required>
+            </div>
+        </div>
+        <div class="field password">
+            <label class="label" for="password">Текущий пароль</label>
+            <div class="control">
+                <input class="input" type="password" name="password" id="password" required>
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button button__changepass is-link" type="submit">Изменить</button>
+            </div>
+        </div>
+    </form>
 </main>
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
 
 {% endblock %}

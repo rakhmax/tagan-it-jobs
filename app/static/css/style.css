@@ -55,3 +55,12 @@ main {
         height: 36px;
     }
 }
+
+@media screen and (min-width: 1024px) {
+    form {
+        width: 40%;
+    }
+    form:not(#changePassword) {
+        margin: auto;
+    }
+}

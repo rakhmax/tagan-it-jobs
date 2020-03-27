@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response
+from flask import jsonify, request, make_response
 from .. import app
 from .. import db
 import hashlib
@@ -12,7 +12,7 @@ def api_signup():
     agreement = request.form.get('agreement')
 
     if not agreement:
-        return make_response(jsonify(msg = 'You need to apply the agreement'), 409)
+        return make_response(jsonify(msg = 'Нужно принять соглашение'), 409)
 
     create_query = f'INSERT INTO users (firstname, lastname, email, password) VALUES ("{firstname}", "{lastname}", "{email}", "{password}")'
     select_query = f'SELECT firstname, lastname, email FROM users WHERE email = "{email}"'
@@ -22,7 +22,7 @@ def api_signup():
         user = db.cursor.fetchone()
 
         if user:
-            return make_response(jsonify(msg = 'User already exists'), 422)
+            return make_response(jsonify(msg = 'Пользователь существует'), 422)
 
     except:
         return make_response(jsonify(msg = 'Unable to create user'), 500)
@@ -31,6 +31,6 @@ def api_signup():
         db.cursor.execute(create_query)
         db.conn.commit()
 
-        return jsonify(msg = 'Thank you for registration')
+        return jsonify(msg = 'Спасибо за регистрацию')
     except:
         return make_response(jsonify(msg = 'Unable to create user'), 500)

@@ -16,9 +16,9 @@ def api_favorites_page():
         vacancies_id = db.cursor.fetchall()
 
         if not vacancies_id:
-            return make_response(jsonify(msg = 'No vacancies'), 422)
-    except:
-        return make_response(jsonify(msg = 'Not working'), 500)
+            return make_response(jsonify(msg = 'Нет вакансий'), 422)
+    except Exception as e:
+        return make_response(jsonify(msg = e), 500)
 
     try:
         vacancies = []
@@ -61,8 +61,8 @@ def delete_favorite(id):
         db.cursor.execute(select)
         db.conn.commit()
 
-        return make_response(jsonify(msg = 'Removed'), 200)
-    except :
+        return make_response(jsonify(msg = 'Удалено'), 200)
+    except Exception as e:
         return make_response(jsonify(msg = 'Server error'), 500)
 
 

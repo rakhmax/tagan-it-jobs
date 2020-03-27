@@ -1,4 +1,4 @@
-from flask import jsonify, request, session, abort, make_response
+from flask import jsonify, request, session, make_response
 from .. import app
 from .. import db
 import hashlib
@@ -14,7 +14,7 @@ def api_login():
     user = db.cursor.fetchone()
 
     if not user:
-        return make_response(jsonify(msg = 'User does not exist'), 422)
+        return make_response(jsonify(msg = 'Пользователя не существует'), 422)
 
     select_query = f'SELECT * FROM users WHERE email = "{email}" AND password = "{password}"'
 
@@ -22,9 +22,9 @@ def api_login():
     user_password = db.cursor.fetchone()
 
     if not user_password:
-        return make_response(jsonify(msg = 'Password is incorrect'), 409)
+        return make_response(jsonify(msg = 'Неверный пароль'), 409)
 
     session.permanent = True
     session['user_id'] = user[0]
 
-    return make_response(jsonify(msg = 'Logged in'), 200)
+    return make_response(jsonify(msg = 'Вход выполнен'), 200)
