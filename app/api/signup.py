@@ -3,7 +3,7 @@ from .. import app
 from .. import db
 import hashlib
 
-@app.route('/api/signup', methods=['POST'])
+@app.route('/api/signup', methods=['GET', 'POST'])
 def api_signup():
     firstname = request.form.get('firstname')
     lastname = request.form.get('lastname')

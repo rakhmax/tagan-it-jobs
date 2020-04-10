@@ -24,12 +24,13 @@ closeModal.addEventListener('click', () => {
     termsModal.classList.remove('is-active')
 })
 
-.addEventListener("submit", async (e) => {
+signupForm.addEventListener("submit", async (e) => {
     e.preventDefault()
 
     helps.forEach(el => el.remove())
  
     try {
+        debugger
         let response = await fetch('/api/signup', { method: 'POST', body: new FormData(signupForm) })
         let data = await response.json()
         

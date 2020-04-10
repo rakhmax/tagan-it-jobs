@@ -5,8 +5,9 @@ from .. import app
 from .. import db
 
 @app.route('/api/vacancies/<page>', methods = ['GET', 'POST'])
-def api_vacancies_page(page):
-    data = json.loads(requests.get(f'https://api.hh.ru/vacancies?area=1550&industry=7&page={page}&per_page=10').text)
+def api_vacancies_page(page, spec = 1):
+    specs = json.loads(requests.get(f'https://api.hh.ru/specializations').text)[0]
+    data = json.loads(requests.get(f'https://api.hh.ru/vacancies?area=1550&specialization={spec}&page={page}&per_page=15').text)
 
     total_vacancies = data['found']
     total_pages = data['pages']
@@ -45,7 +46,8 @@ def api_vacancies_page(page):
             'vacancies': vacancies,
             'total_vacancies': total_vacancies,
             'total_pages': total_pages,
-            'favorites': vacancies_id
+            'favorites': vacancies_id,
+            'specs': specs
         }
     
         vacancies_json = json.loads(json.dumps(final_json))
