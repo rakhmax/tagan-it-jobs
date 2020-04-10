@@ -30,7 +30,6 @@ signupForm.addEventListener("submit", async (e) => {
     helps.forEach(el => el.remove())
  
     try {
-        debugger
         let response = await fetch('/api/signup', { method: 'POST', body: new FormData(signupForm) })
         let data = await response.json()
         
